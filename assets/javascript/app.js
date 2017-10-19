@@ -28,16 +28,6 @@ $(document).ready(function() {
 
 			console.log(childValue.trainName);
 
-			// var childdate = new Date(childValue.startDate);
-			// var monthWorked = monthDiff(childdate, today);
-			
-
-			// tr.append("<td>" + monthWorked + "</td>");
-
-			// tr.append("<td>" + "$" + childValue.monthlyRate + "</td>");
-
-			// var total = childValue.monthlyRate * monthWorked;
-			// tr.append("<td>" + "$" + total + "</td>");
 			
 			var currentTime = moment();
 			console.log("current time is: " + currentTime);
@@ -50,10 +40,13 @@ $(document).ready(function() {
 
 			console.log("time difference: " + timeDifference);
 
+
+			//if the first train hasn't come yet, put that as the next train
 			if(timeDifference < 0) {
 				tr.append("<td>" + childValue.startTime + "</td>");
 				minutesAway = timeDifference * (-1);
 			}
+			//else, calculate when the next train will come
 			else {
 				var mod = timeDifference % childValue.frequency;
 				console.log("mod: " + mod);
@@ -77,21 +70,32 @@ $(document).ready(function() {
   });
 
 
+  //this code runs if the user clicks enter or submit
   $("#select-article").on("click", function(event) {
 		// prevent form from submitting
 		event.preventDefault();
 
+		//grabs all the input data
 		var name = $("#data-name").val().trim();
 		var destination = $("#data-destination").val().trim();
 		var time = $("#data-time").val().trim();
 		var frequency = $("#data-frequency").val().trim();
 
+		//plugs data in firebase
 		database.ref("/TrainData").push({
 			trainName: name,
 			destination: destination,
 			startTime: time,
 			frequency: frequency
 		});
+
+		//clears the input fields
+		$ ("#data-name").val("");
+		$ ("#data-destination").val("");
+		$ ("#data-time").val("");
+		$ ("#data-frequency").val("");
+
+
 	});
 
   // database.ref("/TrainData").set({});	// clear data in Firebase
