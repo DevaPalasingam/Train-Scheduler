@@ -1,0 +1,6 @@
+-next arrival
+	-take current time minus starting time
+		-if negative, print starting time
+	-take the difference % frequency = mod
+	-take freqency - mod = minutes away
+	-add that to the current time

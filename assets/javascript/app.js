@@ -16,6 +16,63 @@ $(document).ready(function() {
   database.ref("/TrainData").on("value", function(snap) {
   	$("#display-article").empty();
 
+  	snap.forEach(function(childsnap) {
+			var childValue = childsnap.val();
+
+			var minutesAway;
+
+			var tr = $("<tr>");
+			tr.append("<td>" + childValue.trainName + "</td>");
+			tr.append("<td>" + childValue.destination + "</td>");
+			tr.append("<td>" + childValue.frequency + "</td>");
+
+			console.log(childValue.trainName);
+
+			// var childdate = new Date(childValue.startDate);
+			// var monthWorked = monthDiff(childdate, today);
+			
+
+			// tr.append("<td>" + monthWorked + "</td>");
+
+			// tr.append("<td>" + "$" + childValue.monthlyRate + "</td>");
+
+			// var total = childValue.monthlyRate * monthWorked;
+			// tr.append("<td>" + "$" + total + "</td>");
+			
+			var currentTime = moment();
+			console.log("current time is: " + currentTime);
+
+			var inputStartTime = moment(childValue.startTime, "HH:mm");
+			console.log("input start time: " + inputStartTime);
+
+
+			var timeDifference = currentTime.diff(inputStartTime, "minutes");
+
+			console.log("time difference: " + timeDifference);
+
+			if(timeDifference < 0) {
+				tr.append("<td>" + childValue.startTime + "</td>");
+				minutesAway = timeDifference * (-1);
+			}
+			else {
+				var mod = timeDifference % childValue.frequency;
+				console.log("mod: " + mod);
+				minutesAway = childValue.frequency - mod;
+				var nextArrival = moment(currentTime, "HH:mm").add(minutesAway, "m");
+				nextArrival = moment(nextArrival).format("hh:mm");
+				console.log("next arrival: " + nextArrival);
+				tr.append("<td>" + nextArrival + "</td>");
+			}
+
+			tr.append("<td>" + minutesAway + "</td>");
+			//next arrival
+			//minutes away
+
+
+
+			$("#display-article").append(tr);
+		});
+
 
   });
 
@@ -36,5 +93,7 @@ $(document).ready(function() {
 			frequency: frequency
 		});
 	});
+
+  // database.ref("/TrainData").set({});	// clear data in Firebase
 
 });
