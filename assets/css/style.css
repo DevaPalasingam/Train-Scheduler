@@ -1,0 +1,16 @@
+* {
+	box-sizing: border-box;
+}
+
+input {
+	width: 100%;
+}
+
+.jumbotron {
+	color: #fff;
+	background-color: #000;
+	text-align: center;
+	padding: 15px;
+	margin-bottom: 30px;
+}
+
